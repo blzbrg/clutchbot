@@ -1,0 +1,13 @@
+input,textarea {
+    background-color: #1A1A1A;
+    color: #868C87;
+}
+
+body {
+    color: #868C87;
+    background-color: black;
+}
+
+#content {
+    background-color: #2A2D2A;
+}

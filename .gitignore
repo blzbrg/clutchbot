@@ -1,0 +1,13 @@
+/target
+/classes
+/checkouts
+/clutch_opts
+/logs
+global_opts.txt
+*~
+pom.xml
+pom.xml.asc
+*.jar
+*.class
+/.lein-*
+/.nrepl-port

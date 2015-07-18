@@ -1,0 +1,42 @@
+body {
+    margin: 0px;
+}
+
+#content {
+    padding: 2em;
+    max-width: 800px;
+    position: absolute;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, 0);
+}
+
+#run_control div {
+    border-top: medium solid grey;
+    margin-top: 1em;
+    padding-top: 0.5em;
+}
+
+#run_control div:first-of-type {
+    border-top: none;
+    margin-top: 0px;
+    padding-top: 0px;
+}
+
+#join_form ul {
+    margin: 5px;
+}
+
+h2 {
+    margin-bottom: 0.2em;
+    margin-top: 0px;
+}
+
+.columns {
+    display: flex;
+    flex-direction: row;
+}
+
+form {
+    margin-bottom: 1em;
+}
