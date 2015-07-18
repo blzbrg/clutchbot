@@ -57,8 +57,8 @@
   [phrase _]
   {:final-reply phrase})
 
-(defn trigger-phrase
-  "(trigger-phrase trigger response msg) If msg contains trigger, respond with response. Supply first two arguments to get a function that takes a message and generates reply if triggered."
+(defn word-trigger
+  "(word-trigger trigger response msg) If msg contains trigger, respond with response. Supply first two arguments to get a function that takes a message and generates reply if triggered."
   [trigger-word response-phrase msg]
   (action-if (partial contains-word? trigger-word)
              (partial unconditional-reply)

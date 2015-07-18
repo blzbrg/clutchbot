@@ -1,6 +1,6 @@
 (ns clutchbot.parser
   (:require [clojure.string :as str]
-            [clutchbot.irc :refer [trigger-phrase group-trigger log-everyone-except log-only log-unconditionally]])
+            [clutchbot.irc :refer [word-trigger group-trigger log-everyone-except log-only log-unconditionally]])
   (:gen-class))
 
 (defn str->op-fn
@@ -17,7 +17,7 @@
   (case str-fn-select
     "group-trigger" (fn [response-phrase op num & trigger-strings]
                       (partial group-trigger (str->op-fn op) (Integer/parseInt num) response-phrase trigger-strings))
-    "trigger-phrase" (fn [trigger response] (partial trigger-phrase trigger response))
+    "word-trigger" (fn [trigger response] (partial word-trigger trigger response))
     ;; "trigger-phrase" (fn [trigger response] (partial trigger-phrase trigger response))
     "who-to-log" (fn [mode & nicks] (let [nick-set (into #{} nicks)]
                                       (case mode

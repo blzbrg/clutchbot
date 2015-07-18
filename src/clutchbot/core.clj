@@ -16,7 +16,7 @@
 
 (def opts^{:doc "Options that affect the entire bot operation"}
   (atom {:are-default true
-         :log-flush-threshhold 10
+         :log-flush-threshhold 20
          :port 1337
          :localhost-only true
          :channel-opts-directory "clutch_opts"
