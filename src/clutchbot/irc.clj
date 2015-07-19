@@ -146,7 +146,7 @@
 (defn enter-channel
   "Enter named channel. Accepts opts for this channel."
   [channel-name logger]
-  (do ; [opts-plus (assoc channel-opts :logger logger)]
+  (do
     (swap! channel-opts assoc-in [channel-name :logger] logger)
     (swap! joined-channels conj channel-name)
     (ircj/join @connection channel-name)

@@ -35,7 +35,7 @@
     (println "Couldn't fine global_opts.txt, using defaults.")))
 
 (defn replace-channel-opts-from-directory
-  "Replace opts for all channels with the opts directory identified by path. Options for channel #x are in file named #x"
+  "Replace opts for all channels with the opts directory identified by path. Options for channel #x are in file named x.text"
   [path-of-dir]
   (->> path-of-dir
        (parser/server-dir->channel-opts)
@@ -44,7 +44,7 @@
 (defn channel-names-loaded
   "Returns seq of names of channels that have opts loaded"
   []
-  (keys (deref clutchbot.irc/channel-opts)))
+  (into #{} (keys (deref clutchbot.irc/channel-opts))))
 
 (def done-running-promise^{:doc "Fulfilled with true when it is time to shut down"}
   (promise))
@@ -104,7 +104,9 @@
                            (map (fn [channel-name]
                                   [:div
                                    (form/check-box {:id channel-name} "channels-to-join[]" false channel-name)
-                                   (form/label channel-name channel-name)])
+                                   (form/label channel-name channel-name)
+                                   " "
+                                   (element/link-to (str "/conf/" (subs channel-name 1)) "view conf")])
                                 (channel-names-loaded)))]
                          (form/submit-button "Join checked channels"))]
     :channel-list [:div
@@ -154,32 +156,40 @@
                  [:div#content
                  (form :launch)
                   (form :run-control)]])))
+  (GET "/conf/:channel-name" [channel-name]
+       (-> (if (contains? (channel-names-loaded) (str "#" channel-name))
+             (slurp (str "clutch_opts/" channel-name ".txt"))
+             "No conf file was loaded for this channel.")
+           (ring.util.response/response)
+           (ring.util.response/content-type "text/plain")))
   (POST "/launch" [bot_name channel_name address port]
         (do
           (reset! connection-state :connected)
           (clutchbot.irc/enter-server address (Integer/parseInt port) bot_name)
-          (ring.util.response/redirect-after-post "/")))
+          (ring.util.response/redirect "/" :see-other)))
   (POST "/run-control" [action]
         (case action
           "shutdown" (do (shutdown-bot)
                          "Shutting down.")
-          "reload-confs" (replace-channel-opts-from-directory (@opts :channel-opts-directory))))
+          "reload-confs" (do
+                           (replace-channel-opts-from-directory (@opts :channel-opts-directory))
+                           (ring.util.response/redirect "/" :see-other))))
   (POST "/multi-channel-join" [channels-to-join] ;; channels-to-join: collection of checkbox values
         (do
           (doseq [ch-nm channels-to-join]
             (clutchbot.irc/enter-channel ch-nm (logger/mk-channel-logger ch-nm (@opts :log-flush-threshhold))))
-          (ring.util.response/redirect-after-post "/")))
+          (ring.util.response/redirect "/" :see-other)))
 
   (POST "/single-channel-join" [channel-name conf]
         (let [temp-opts (clutchbot.parser/string->channel-opts conf)]
           (swap! clutchbot.irc/channel-opts assoc channel-name temp-opts)
           (clutchbot.irc/enter-channel channel-name (logger/mk-channel-logger channel-name (@opts :log-flush-threshhold)))
-          (ring.util.response/redirect-after-post "/")))
+          (ring.util.response/redirect "/" :see-other)))
   (POST "/multi-channel-part" [channels-to-part]
         (do
           (doseq [ch-nm channels-to-part]
                 (clutchbot.irc/part-channel ch-nm))
-          (ring.util.response/redirect-after-post "/")))
+          (ring.util.response/redirect "/" :see-other)))
   ) ;end routes
 
 (def wrapped-handler

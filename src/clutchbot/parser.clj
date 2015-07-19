@@ -62,11 +62,13 @@
        (file-seq)
        ;; only include actual files
        (filter (fn [member-file] (.isFile member-file)))
+       ;; only include .txt files
+       (filter (fn [member-file] (.endsWith (.getName member-file) ".txt")))
        ;; parse each file, making channel-opts
        (map (fn [member-file] ; makes each member file into [filename opts]
-              (let [fname (.getName member-file)
+              (let [[_ name] (re-find #"(.+)\.txt$" (.getName member-file))
                     fpath (.getPath member-file)]
-                [fname (file-path->channel-opts fpath)])))
+                [(str "#" name) (file-path->channel-opts fpath)])))
        ;; merge parsed files together into global opts
        (into {}))) ; will make map from filename to opts
 
