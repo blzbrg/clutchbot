@@ -40,10 +40,10 @@ someone says 2 or more of the words "rare", "pepe", or "ultra". The end of the l
 words, separated by bars, that the bot should look for. It counts how many appear, then uses the
 math operator in the third section to compare that number to the number in the fourth section. Here,
 it checks whether the number of words found is greater than or equal to 2.
-### Available operators
+#### Available operators
 * `>`/`<` : number of words in message is greater than/less than...
 * `=` : number of words in message is exactly...
-* `<=`/`>=` : number of words is less than or equal/greater than or equal (written &le;/&ge in math)...
+* `<=`/`>=` : number of words is less than or equal/greater than or equal (written &le;/&ge; in math)...
 
 ## Logging
 
@@ -72,4 +72,15 @@ messages should not be logged can be long.
 
 Write `who-to-log | only | nickname1 | nickname2 | ...`. Logs only messages from named users.
 
-Written in Clojure. Uses the [IRCLJ](https://github.com/Raynes/irclj) library for IRC. Web control panel uses [Compojure](https://github.com/weavejester/compojure), [Ring](https://github.com/ring-clojure/ring), [httpkit](http://www.http-kit.org/), and [Hiccup](https://github.com/weavejester/hiccup).
+## UI Colors
+
+The UI colors can be using `controls-theme | theme-name` where `theme-name` is one of the (at
+present very short) theme names:
+* light-orange
+* dark-greytones
+* light-pink
+New themes that only change colors are extremely easy to write and contribute (existing themes are
+in `resources/theme-theme-name.css` (e.g. `resources/theme-light-orange.css`).
+
+# Bot innards
+Written in Clojure. Uses the [IRCLJ](https://github.com/Raynes/irclj) library for IRC. Web control panel uses [Compojure](https://github.com/weavejester/compojure), [Ring](https://github.com/ring-clojure/ring), [httpkit](http://www.http-kit.org/), and [Hiccup](https://github.com/weavejester/hiccup)
